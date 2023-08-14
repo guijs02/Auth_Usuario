@@ -1,12 +1,10 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using UsuariosApi.Authorization;
 using UsuariosApi.Data;
 using UsuariosApi.Models;
 using UsuariosApi.Services;
+using UsuariosApi.ConfigJwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,43 +25,16 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<TokenService>();
 
 builder.Services.AddSingleton<IAuthorizationHandler, IdadeAuthorization>();
+builder.Services.AddSingleton<IAuthorizationHandler, SupervisorAuthorization>();
 
 //código omitido
 
-builder.Services
-    .AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters =
-            new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("fjdik4343493ADFJFAK933432FDxxs&$#33444fsjdbabaii(9%22")
-                ),
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ClockSkew = TimeSpan.Zero
-            };
-    });
-    
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("IdadeMinima", policy => policy.AddRequirements(new IdadeMinima(18)));
-});
+ConfiguracaoJwtIdentity.ConfigJwtBearer(builder.Services);
 
+ConfiguracaoJwtIdentity.ConfigAddPolicy(builder.Services);
+
+ConfiguracaoJwtIdentity.ConfigIdentityOptions(builder.Services);
 //código omitido
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequiredLength = 3;
-});
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();

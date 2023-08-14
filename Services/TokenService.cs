@@ -15,7 +15,8 @@ namespace UsuariosApi.Services
                 new Claim("username", usuario.UserName),
                 new Claim("id", usuario.Id),
                 new Claim(ClaimTypes.DateOfBirth, usuario.DataNascimento.ToString()),
-                new Claim("loginTimeStmp", DateTime.UtcNow.ToString()) 
+                new Claim("loginTimeStmp", DateTime.UtcNow.ToString()),
+                new Claim("tipoCargo", usuario.TipoCargo.ToString()) 
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("fjdik4343493ADFJFAK933432FDxxs&$#33444fsjdbabaii(9%22"));

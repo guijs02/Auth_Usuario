@@ -9,7 +9,7 @@ namespace UsuariosApi.Authorization
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IdadeMinima requirement)
         {
             var dataNascimentoClaim = context.User.FindFirst(c => c.Type == ClaimTypes.DateOfBirth);
-
+            
             if(dataNascimentoClaim is null)
             //diz que a tarefa foi completada
             return Task.CompletedTask;

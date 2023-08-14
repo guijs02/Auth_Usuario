@@ -1,4 +1,6 @@
+using System;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UsuariosApi.Data.Dtos;
@@ -37,7 +39,7 @@ namespace UsuariosApi.Controllers
         {
             try
             {
-                var token = await _usuarioService.Login(dto);
+                string token = await _usuarioService.Login(dto);
                 return Ok(token);
             }
             catch (Exception e)
@@ -45,5 +47,20 @@ namespace UsuariosApi.Controllers
                 return BadRequest("Usuario não encontrado");
             }
         }
+
+        [HttpGet("acesso")]
+        [Authorize]
+        public async Task<IActionResult> Acesso()
+        {
+            return Ok("acessado");
+        }
+
+        [HttpGet("acess-supervisor")]
+        [Authorize(Policy = "ApenasSupervisor")]
+        public IActionResult SupervisionarFuncionarios()
+        {
+            return Ok("acessado");
+        }
+
     }
 }
