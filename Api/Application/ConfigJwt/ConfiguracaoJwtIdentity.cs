@@ -41,7 +41,6 @@ namespace UsuariosApi.Api.Application.ConfigJwt
                             )
                             {
                                 context.Response.Headers.Add("Token-Expired", "true");
-                                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 return;
                             }
                         },
@@ -58,11 +57,6 @@ namespace UsuariosApi.Api.Application.ConfigJwt
                 options.AddPolicy(
                     "IdadeMinima",
                     policy => policy.AddRequirements(new IdadeMinima(18))
-                );
-
-                options.AddPolicy(
-                    "ApenasSupervisor",
-                    policy => policy.AddRequirements(new Supervisor(ETipoCargo.Supervisor))
                 );
             });
         }
