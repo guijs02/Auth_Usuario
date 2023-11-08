@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using UsuariosApi.Authorization;
-using UsuariosApi.Data;
-using UsuariosApi.Models;
-using UsuariosApi.Services;
-using UsuariosApi.ConfigJwt;
+using UsuariosApi.Api.Domain.Models;
+using UsuariosApi.Api.Application.Authorization;
+using UsuariosApi.Api.Application.ConfigJwt;
+using UsuariosApi.Api.Application.Services;
+using UsuariosApi.Api.Infraestructure.Context;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,13 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => {
+    options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme{
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+});
 
 var app = builder.Build();
 
