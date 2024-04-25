@@ -6,6 +6,7 @@ O objetivo do projeto era praticar habilidades para uma implementação de um si
 - Identity,
 - Entity Framework,
 - Bibliotecas AutoMapper e JWT.
+- SQL Server
 <br><br>
 
   
